@@ -24,3 +24,10 @@ $ python invert.py input.csv output.csv
 ```bash
 $ python snippets.py
 ```
+
+numpy がいかに高速か。 3000x3000の行列の逆行列を計算してみる。
+
+```bash
+$ python invert_large_matrix.py
+It tooks 0.6150388717651367 seconds to calculate invert matrix of size 3000.
+```

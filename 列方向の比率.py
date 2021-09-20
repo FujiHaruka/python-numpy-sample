@@ -5,7 +5,7 @@ import numpy as np
 
 def 地域の小行列(元行列, h):
     """
-    元の行列から地域の小行列を取り出す
+    元の行列からh地域の小行列を取り出す
     """
     開始 = 部門数 * h
     終了 = 開始 + 部門数
@@ -47,13 +47,13 @@ def h地域のi部門におけるk地域への交易比率(元行列, Mベクト
 
 if __name__ == "__main__":
     # csvファイルを numpy array として読み込む
-    元行列 = np.genfromtxt("交易行列/A_Determinant.csv", delimiter=",", encoding='utf_8_sig')
-    G2乗ベクトル = np.genfromtxt("交易行列/G^2.csv", delimiter=",", encoding='utf_8_sig')
-    Mベクトル = np.genfromtxt("交易行列/m4A.csv", encoding='utf_8_sig')
+    元行列 = np.genfromtxt("交易行列/A_Determinant.csv", delimiter=",", encoding='utf_8_sig', dtype=np.float32)
+    G2乗ベクトル = np.genfromtxt("交易行列/G^2.csv", delimiter=",", encoding='utf_8_sig', dtype=np.float32)
+    Mベクトル = np.genfromtxt("交易行列/m4A.csv", encoding='utf_8_sig', dtype=np.float32)
 
     # t^{kh}_i をまずは普通の行列として作る
     # 空の行列を作る
-    t = np.empty((地域数, 地域数, 部門数))
+    t = np.empty((地域数, 地域数, 部門数), dtype=np.float32)
     for h in range(地域数):
         for i in range(部門数):
             # こういうリストの書き方を python では「内包表記」という
@@ -63,6 +63,7 @@ if __name__ == "__main__":
                 t[h, k, i] = h地域のi部門におけるk地域への交易比率(元行列, Mベクトル, グラビティ比のリスト, h, k, i)
 
     # tから列方向の比率行列を計算する
+    # ゼロ埋めした行列を作る
     列方向の比率行列 = np.zeros((地域数 * 部門数, 地域数 * 部門数))
     for h in range(地域数):
         for i in range(部門数):
@@ -74,4 +75,10 @@ if __name__ == "__main__":
         列の和 = 列方向の比率行列[:, column].sum()
         # 誤差込みで1に近いことを確認する
         if 列の和 < 0.9999 or 列の和 > 1.00001:
+            # ただし0になるケースは除外
+            if 列の和 == 0.0:
+                continue
             print(f"[警告] 列方向の比率行列における列の和が1ではありません。 column={column} 列の和={列の和}")
+
+    np.savetxt("交易行列/列方向の比率行列.csv", 列方向の比率行列, delimiter=",", fmt="%.10f")
+    print("交易行列/列方向の比率行列.csv に書き込みました。")

@@ -34,12 +34,27 @@ def キャリブレート(元行列):
                 行列[下の行, c] = 行列[下の行, c] - 補正値 / (行数 - 下の行)
     return 行列
 
+def CSVファイルの冗長な0表記をなくす(ファイルパス):
+    with open(ファイルパス, encoding="utf_8_sig") as ファイル:
+        CSVテキスト = ファイル.read()
+    # 文字列置換
+    CSVテキスト = CSVテキスト.replace("0.000000000000000000e+00", "0")
+    # 同じファイル名で保存
+    with open(ファイルパス, mode="w", encoding="utf_8_sig") as ファイル:
+        ファイル.write(CSVテキスト)
+
 if __name__ == "__main__":
+    # 入出力のファイル名。適宜書き換えてください
+    元行列ファイル = "列方向の比率行列_A.csv"
+    出力ファイル = "交易行列.csv"
+
     # csvファイルを numpy array として読み込む
-    元行列 = np.genfromtxt("交易行列/列方向の比率行列.csv", delimiter=",", encoding='utf_8_sig', dtype=np.float32)
+    元行列 = np.genfromtxt(元行列ファイル, delimiter=",", encoding='utf_8_sig', dtype=np.float32)
 
     キャリブレーション済み行列 = キャリブレート(元行列)
 
     # 結果をファイルに書き込む
     # 元行列データを上書きしたので元行列を別ファイルに書き込めばよい
-    np.savetxt("交易行列.csv", 元行列, delimiter=",", fmt="%.10f")
+    np.savetxt(出力ファイル, 元行列, delimiter=",", encoding="utf_8_sig")
+    CSVファイルの冗長な0表記をなくす(出力ファイル)
+    print(f"完了！ {出力ファイル} に書き込みました。")

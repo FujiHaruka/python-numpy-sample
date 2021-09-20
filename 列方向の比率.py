@@ -24,14 +24,14 @@ def mの値(Mベクトル, h, d):
     """
     return Mベクトル[h * 部門数 + d]
 
-def グラビティ比(元行列, G2乗ベクトル, h1, h2, d):
+def グラビティ比(元行列, G2乗行列, h1, h2, d):
     if h1 == h2:
         # 0にしておくと都合が良い
         return 0
     h2地域 = 地域の小行列(元行列, h2)
-    return 行の和(h2地域, d) / (G2乗ベクトル[h1, h2] ** 2)
+    return 行の和(h2地域, d) / (G2乗行列[h1, h2] ** 2)
 
-def 各地域のグラビティ比のリスト(元行列, G2乗ベクトル, h, i):
+def 各地域のグラビティ比のリスト(元行列, G2乗行列, h, i):
     """
     地域数個のグラビティ比のリスト
     h - 自地域
@@ -39,7 +39,7 @@ def 各地域のグラビティ比のリスト(元行列, G2乗ベクトル, h, 
     """
     # pythonの内包表記でリストを定義
     # k番目の要素が、h地域とk地域のi部門におけるグラビティ比 G^{hk}_i を表す
-    グラビティ比のリスト = [グラビティ比(元行列, G2乗ベクトル, h, k, i) for k in range(地域数)]
+    グラビティ比のリスト = [グラビティ比(元行列, G2乗行列, h, k, i) for k in range(地域数)]
     return グラビティ比のリスト
 
 def h地域のi部門におけるk地域への交易比率(元行列, Mベクトル, グラビティ比のリスト, h, k, i):
@@ -57,17 +57,22 @@ def h地域のi部門におけるk地域への交易比率(元行列, Mベクト
         return mの比 * グラビティ比のリスト[k] / グラビティ比の総和
 
 if __name__ == "__main__":
+    # 入力ファイル名
+    元行列ファイル = "交易行列/A_Determinant.csv"
+    Mベクトルファイル = "交易行列/m4A.csv"
+    G2乗行列ファイル = "交易行列/G^2.csv"
+
     # csvファイルを numpy array として読み込む
-    元行列 = np.genfromtxt("交易行列/A_Determinant.csv", delimiter=",", encoding='utf_8_sig', dtype=np.float32)
-    G2乗ベクトル = np.genfromtxt("交易行列/G^2.csv", delimiter=",", encoding='utf_8_sig', dtype=np.float32)
-    Mベクトル = np.genfromtxt("交易行列/m4A.csv", encoding='utf_8_sig', dtype=np.float32)
+    元行列 = np.genfromtxt(元行列ファイル, delimiter=",", encoding='utf_8_sig', dtype=np.float32)
+    Mベクトル = np.genfromtxt(Mベクトルファイル, encoding='utf_8_sig', dtype=np.float32)
+    G2乗行列 = np.genfromtxt(G2乗行列ファイル, delimiter=",", encoding='utf_8_sig', dtype=np.float32)
 
     # t^{kh}_i をまずは普通の行列として作る
     # 空の行列を作る
     t = np.empty((地域数, 地域数, 部門数), dtype=np.float32)
     for h in range(地域数):
         for i in range(部門数):
-            グラビティ比のリスト = 各地域のグラビティ比のリスト(元行列, G2乗ベクトル, h, i)
+            グラビティ比のリスト = 各地域のグラビティ比のリスト(元行列, G2乗行列, h, i)
             for k in range(地域数):
                 k地域 = 地域の小行列(元行列, k)
                 t[h, k, i] = h地域のi部門におけるk地域への交易比率(元行列, Mベクトル, グラビティ比のリスト, h, k, i)
@@ -91,5 +96,6 @@ if __name__ == "__main__":
                 continue
             print(f"[警告] 列方向の比率行列における列の和が1ではありません。 column={column} 列の和={列の和}")
 
+    # 結果をファイルに書き込む
     np.savetxt("交易行列/列方向の比率行列.csv", 列方向の比率行列, delimiter=",", fmt="%.10f")
     print("交易行列/列方向の比率行列.csv に書き込みました。")

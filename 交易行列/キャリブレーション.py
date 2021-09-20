@@ -3,11 +3,13 @@ import numpy as np
 地域数 = 47
 部門数 = 77
 
+
 def 行の和(行列, i):
     """
     行列のi行目の和
     """
     return 行列[i].sum()
+
 
 def キャリブレート(元行列):
     行列 = 元行列.copy()
@@ -34,6 +36,7 @@ def キャリブレート(元行列):
                 行列[下の行, c] = 行列[下の行, c] - 補正値 / (行数 - 下の行)
     return 行列
 
+
 def CSVファイルの冗長な0表記をなくす(ファイルパス):
     with open(ファイルパス, encoding="utf_8_sig") as ファイル:
         CSVテキスト = ファイル.read()
@@ -43,13 +46,15 @@ def CSVファイルの冗長な0表記をなくす(ファイルパス):
     with open(ファイルパス, mode="w", encoding="utf_8_sig") as ファイル:
         ファイル.write(CSVテキスト)
 
+
 if __name__ == "__main__":
     # 入出力のファイル名。適宜書き換えてください
     元行列ファイル = "列方向の比率行列_A.csv"
     出力ファイル = "交易行列.csv"
 
     # csvファイルを numpy array として読み込む
-    元行列 = np.genfromtxt(元行列ファイル, delimiter=",", encoding='utf_8_sig', dtype=np.float32)
+    元行列 = np.genfromtxt(元行列ファイル, delimiter=",",
+                        encoding='utf_8_sig', dtype=np.float32)
 
     キャリブレーション済み行列 = キャリブレート(元行列)
 

@@ -2,6 +2,7 @@ import unittest
 import numpy as np
 from キャリブレーション import キャリブレート
 
+
 class TestStringMethods(unittest.TestCase):
 
     def test_キャリブレート(self):
@@ -20,6 +21,7 @@ class TestStringMethods(unittest.TestCase):
             [0.639035, 0.0, 0.505263, 0.0],
             [0.0, 0.571429, 0.0, 0.512195],
         ]))
+
 
 if __name__ == '__main__':
     unittest.main()

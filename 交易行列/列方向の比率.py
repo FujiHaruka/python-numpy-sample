@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def 地域の小行列(元行列, 地域数, 部門数, h):
     """
     元の行列からh地域の小行列を取り出す
@@ -14,11 +15,13 @@ def 地域の小行列(元行列, 地域数, 部門数, h):
     小行列 = 元行列[行開始:行終了, 列開始:列終了]
     return 小行列
 
+
 def 行の和(行列, i):
     """
     行列のi行目の和
     """
     return 行列[i].sum()
+
 
 def mの値(Mベクトル, 部門数, h, d):
     """
@@ -26,12 +29,14 @@ def mの値(Mベクトル, 部門数, h, d):
     """
     return Mベクトル[h * 部門数 + d]
 
+
 def グラビティ比(元行列, G2乗行列, 地域数, 部門数, h1, h2, d):
     if h1 == h2:
         # 0にしておくと都合が良い
         return 0
     h2地域 = 地域の小行列(元行列, 地域数, 部門数, h2)
     return 行の和(h2地域, d) / (G2乗行列[h1, h2] ** 2)
+
 
 def 各地域のグラビティ比のリスト(元行列, G2乗行列, 地域数, 部門数, h, i):
     """
@@ -43,6 +48,7 @@ def 各地域のグラビティ比のリスト(元行列, G2乗行列, 地域数
     # k番目の要素が、h地域とk地域のi部門におけるグラビティ比 G^{hk}_i を表す
     グラビティ比のリスト = [グラビティ比(元行列, G2乗行列, 地域数, 部門数, h, k, i) for k in range(地域数)]
     return グラビティ比のリスト
+
 
 def h地域のi部門におけるk地域への交易比率(元行列, Mベクトル, グラビティ比のリスト, 地域数, 部門数, h, k, i):
     """
@@ -61,6 +67,7 @@ def h地域のi部門におけるk地域への交易比率(元行列, Mベクト
         グラビティ比の総和 = sum(グラビティ比のリスト)
         return mの比 * グラビティ比のリスト[k] / グラビティ比の総和
 
+
 def 交易比率の3次元行列を作る(元行列, G2乗行列, 地域数, 部門数):
     """
     t^{hk}_i に 行列[h, k, i] でアクセスできるような行列を作る
@@ -71,8 +78,10 @@ def 交易比率の3次元行列を作る(元行列, G2乗行列, 地域数, 部
         for i in range(部門数):
             グラビティ比のリスト = 各地域のグラビティ比のリスト(元行列, G2乗行列, 地域数, 部門数, h, i)
             for k in range(地域数):
-                行列[h, k, i] = h地域のi部門におけるk地域への交易比率(元行列, Mベクトル, グラビティ比のリスト, 地域数, 部門数, h, k, i)
+                行列[h, k, i] = h地域のi部門におけるk地域への交易比率(
+                    元行列, Mベクトル, グラビティ比のリスト, 地域数, 部門数, h, k, i)
     return 行列
+
 
 def CSVファイルの冗長な0表記をなくす(ファイルパス):
     """
@@ -85,6 +94,7 @@ def CSVファイルの冗長な0表記をなくす(ファイルパス):
     # 同じファイル名で保存
     with open(ファイルパス, mode="w", encoding="utf_8_sig") as ファイル:
         ファイル.write(CSVテキスト)
+
 
 if __name__ == "__main__":
     # 定数
@@ -105,9 +115,11 @@ if __name__ == "__main__":
     # 出力ファイル = "交易行列/列方向の比率行列_CG.csv"
 
     # csvファイルを numpy array として読み込む
-    元行列 = np.genfromtxt(元行列ファイル, delimiter=",", encoding='utf_8_sig', dtype=np.float32)
+    元行列 = np.genfromtxt(元行列ファイル, delimiter=",",
+                        encoding='utf_8_sig', dtype=np.float32)
     Mベクトル = np.genfromtxt(Mベクトルファイル, encoding='utf_8_sig', dtype=np.float32)
-    G2乗行列 = np.genfromtxt(G2乗行列ファイル, delimiter=",", encoding='utf_8_sig', dtype=np.float32)
+    G2乗行列 = np.genfromtxt(G2乗行列ファイル, delimiter=",",
+                          encoding='utf_8_sig', dtype=np.float32)
 
     # 入力の行列サイズを検証
     if 元行列.shape != (地域数 * 部門数, 地域数 * 部門数) and 元行列.shape != (地域数 * 部門数, 地域数):

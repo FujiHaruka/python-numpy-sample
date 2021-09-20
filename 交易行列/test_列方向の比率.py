@@ -2,6 +2,7 @@ import unittest
 import numpy as np
 from 列方向の比率 import 地域の小行列, 行の和, mの値, グラビティ比
 
+
 class TestStringMethods(unittest.TestCase):
     def test_地域の小行列(self):
         地域数 = 2
@@ -70,6 +71,7 @@ class TestStringMethods(unittest.TestCase):
             グラビティ比(元行列, G2乗行列, 地域数, 部門数, h1=0, h2=1, d=0),
             0.5,
         )
+
 
 if __name__ == '__main__':
     unittest.main()

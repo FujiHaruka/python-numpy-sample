@@ -57,15 +57,24 @@ def h地域のi部門におけるk地域への交易比率(元行列, Mベクト
         return mの比 * グラビティ比のリスト[k] / グラビティ比の総和
 
 if __name__ == "__main__":
-    # 入力ファイル名
+    # 入出力ファイル名
     元行列ファイル = "交易行列/A_Determinant.csv"
     Mベクトルファイル = "交易行列/m4A.csv"
     G2乗行列ファイル = "交易行列/G^2.csv"
+    出力ファイル = "交易行列/列方向の比率行列.csv"
 
     # csvファイルを numpy array として読み込む
     元行列 = np.genfromtxt(元行列ファイル, delimiter=",", encoding='utf_8_sig', dtype=np.float32)
     Mベクトル = np.genfromtxt(Mベクトルファイル, encoding='utf_8_sig', dtype=np.float32)
     G2乗行列 = np.genfromtxt(G2乗行列ファイル, delimiter=",", encoding='utf_8_sig', dtype=np.float32)
+
+    # 入力の行列サイズを検証
+    if 元行列.shape != (地域数 * 部門数, 地域数 * 部門数):
+        raise Exception(f"入力ファイルの行列サイズが正しくありません。 {元行列ファイル}: {元行列.shape}")
+    if Mベクトル.shape != (地域数 * 部門数,):
+        raise Exception(f"入力ファイルの行列サイズが正しくありません。 {Mベクトルファイル}: {Mベクトル.shape}")
+    if G2乗行列.shape != (地域数, 地域数):
+        raise Exception(f"入力ファイルの行列サイズが正しくありません。 {G2乗行列ファイル}: {G2乗行列.shape}")
 
     # t^{kh}_i をまずは普通の行列として作る
     # 空の行列を作る
@@ -97,5 +106,5 @@ if __name__ == "__main__":
             print(f"[警告] 列方向の比率行列における列の和が1ではありません。 column={column} 列の和={列の和}")
 
     # 結果をファイルに書き込む
-    np.savetxt("交易行列/列方向の比率行列.csv", 列方向の比率行列, delimiter=",", fmt="%.10f")
-    print("交易行列/列方向の比率行列.csv に書き込みました。")
+    np.savetxt(出力ファイル, 列方向の比率行列, delimiter=",")
+    print(f"完了！ {出力ファイル} に書き込みました。")

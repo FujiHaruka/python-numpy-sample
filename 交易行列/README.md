@@ -14,5 +14,5 @@
 ユニットテストを実行するには以下のコマンドをこのディレクトリ内で実行する。
 
 ```
-$ python -m unittest
+$ python -m unittest test_<テスト対象>.py
 ```

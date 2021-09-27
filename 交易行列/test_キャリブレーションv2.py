@@ -51,5 +51,21 @@ class TestStringMethods(unittest.TestCase):
             self.assertEqual(キャリブレーション結果[:, 列].sum(), 元行列[:, 列].sum())
 
 
+    def test_行の対角小行列成分の和(self):
+        A = np.array([
+            [100, 100, 0, 0, 0, 0],
+            [200, 100, 0, 0, 0, 0],
+            [0, 0, 300, 100, 0, 0],
+            [0, 0, 400, 100, 0, 0],
+            [0, 0, 0, 0, 500, 100],
+            [0, 0, 0, 0, 600, 100],
+        ])
+        self.assertEqual(行の対角小行列成分の和(A, 小行列サイズ=2, 行=0), 200)
+        self.assertEqual(行の対角小行列成分の和(A, 小行列サイズ=2, 行=1), 300)
+        self.assertEqual(行の対角小行列成分の和(A, 小行列サイズ=2, 行=2), 400)
+        self.assertEqual(行の対角小行列成分の和(A, 小行列サイズ=2, 行=3), 500)
+        self.assertEqual(行の対角小行列成分の和(A, 小行列サイズ=2, 行=4), 600)
+        self.assertEqual(行の対角小行列成分の和(A, 小行列サイズ=2, 行=5), 700)
+
 if __name__ == '__main__':
     unittest.main()

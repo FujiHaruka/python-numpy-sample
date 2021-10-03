@@ -60,7 +60,7 @@ class TestStringMethods(unittest.TestCase):
         移出ベクトル = np.array([10, 10, 10, 10, 10, 10], dtype=float)
         行の和ベクトル = np.array([6, 11, 5, 15, 10, 13], dtype=float)
         移出ベクトルとの差 = 移出ベクトル - 行の和ベクトル
-        行方向の補正量分配行列 = 移出ベクトルとの差を行方向に分配する(元行列, 移出ベクトルとの差, 行の和ベクトル, 小行列サイズ=2)
+        行方向の補正量分配行列 = 移出ベクトルとの差を行方向に分配する(元行列, 移出ベクトルとの差, 小行列サイズ=2)
         np.testing.assert_almost_equal(
             行方向の補正量分配行列,
             np.array([

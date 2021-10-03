@@ -7,8 +7,8 @@ from キャリブレーションv3 import (
     移出ベクトルとの差が正になる行を抜き出す,
     移出ベクトルとの差が負になる行を抜き出す,
     移出ベクトルとの差を分配する,
-    行方向の和に対する比率行列を求める,
-    列方向の和に対する比率行列を求める,
+    行和に対する比率行列を求める,
+    列和に対する比率行列を求める,
 )
 
 
@@ -119,9 +119,9 @@ class TestStringMethods(unittest.TestCase):
             ])
         )
 
-    def test_行方向の和に対する比率行列を求める(self):
+    def test_行和に対する比率行列を求める(self):
         np.testing.assert_almost_equal(
-            行方向の和に対する比率行列を求める(np.array([
+            行和に対する比率行列を求める(np.array([
                 [1, 4, 0],
                 [12, 13, 0],
                 [0, 0, 0]
@@ -133,9 +133,9 @@ class TestStringMethods(unittest.TestCase):
             ])
         )
 
-    def test_列方向の和に対する比率行列を求める(self):
+    def test_列和に対する比率行列を求める(self):
         np.testing.assert_almost_equal(
-            列方向の和に対する比率行列を求める(np.array([
+            列和に対する比率行列を求める(np.array([
                 [1, 12, 0],
                 [4, 13, 0],
                 [0, 0, 0],
